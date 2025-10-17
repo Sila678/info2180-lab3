@@ -27,22 +27,19 @@ window.onload = function(){
 
 	for (let i=0; i< sqrs.length; i++){
 		sqrs[i].addEventListener("click", function(){
-			if(!gameActive) return; //No further moves can be made
-			//Only mark a square if empty
-			if (sqrs[i].textContent === ""){
-				sqrs[i].textContent = curtPlayer;
-				sqrs[i].classList.add(curtPlayer); //for appropriate colour from stylesheet
-				gameState[i] = curtPlayer;
+			if(!gameActive || gameState[i] !== null) return; //No further moves can be made
+			sqrs[i].textContent = curtPlayer;
+			sqrs[i].classList.add(curtPlayer); //for appropriate colour from stylesheet
+			gameState[i] = curtPlayer;
 
-				//Ceck for winner
-				if(winnerCheck()){
-					status.textContent = `Congratulations! ${curtPlayer} is the Winner!`;
-					status.classList.add("you-won");
-					gameActive = false;
-				} else{
-					//Switch turn
-					curtPlayer = curtPlayer === "X" ? "O" : "X";
-				}
+			//Ceck for winner
+			if(winnerCheck()){
+				status.textContent = `Congratulations! ${curtPlayer} is the Winner!`;
+				status.classList.add("you-won");
+				gameActive = false;
+			} else{
+				//Switch turn
+				curtPlayer = curtPlayer === "X" ? "O" : "X";
 			}
 		});
 
@@ -78,6 +75,21 @@ window.onload = function(){
 		return false;
 	}
 
-	
+	//Reset the game
+	button.addEventListener("click", function(){
+		//Clear each square
+		for(let i=0; i < sqrs.length; i++){
+			sqrs[i].textContent = "";
+			sqrs[i].classList.remove("X", "O");
+		}
 
+		//Reset game variables
+		gameState = Array(9).fill(null);
+		curtPlayer = "X";
+		gameActive = true;
+
+		// Reset status message
+		status.textContent = "Move your mouse over a square and click to play an X or an O.";
+		status.classList.remove("you-won");
+	});
 };

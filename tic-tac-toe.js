@@ -15,7 +15,7 @@ window.onload = function(){
 	//Adding the class "square to each box"
 	for (var i = 0; i < sqrs.length; i++){
 		sqrs[i].setAttribute("class", "square");
-	};
+	}
 
 	//Game play
 	//Tracks the current player
@@ -36,7 +36,16 @@ window.onload = function(){
 				curtPlayer = curtPlayer === "X" ? "O" : "X";
 			}
 		});
+
+		//Changing style when mouse is moved over a square
+		sqrs[i].addEventListener("mouseover", function(){
+			sqrs[i].classList.add("hover");
+		});
+
+		sqrs[i].addEventListener("mouseout", function(){
+			sqrs[i].classList.remove("hover");
+		});
 	}
 
 
-}
+};

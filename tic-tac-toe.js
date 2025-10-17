@@ -23,17 +23,26 @@ window.onload = function(){
 
 	//Keeps track of game state
 	let gameState = Array(9).fill(null);
+	let gameActive = true; //Stops game play if someone wins
 
 	for (let i=0; i< sqrs.length; i++){
 		sqrs[i].addEventListener("click", function(){
+			if(!gameActive) return; //No further moves can be made
 			//Only mark a square if empty
 			if (sqrs[i].textContent === ""){
 				sqrs[i].textContent = curtPlayer;
 				sqrs[i].classList.add(curtPlayer); //for appropriate colour from stylesheet
 				gameState[i] = curtPlayer;
 
-				//Switch turn
-				curtPlayer = curtPlayer === "X" ? "O" : "X";
+				//Ceck for winner
+				if(winnerCheck()){
+					status.textContent = `Congratulations! ${curtPlayer} is the Winner!`;
+					status.classList.add("you-won");
+					gameActive = false;
+				} else{
+					//Switch turn
+					curtPlayer = curtPlayer === "X" ? "O" : "X";
+				}
 			}
 		});
 
@@ -47,5 +56,28 @@ window.onload = function(){
 		});
 	}
 
+	//Check for a winner
+	function winnerCheck(){
+		const win_Patterns = [
+			[0, 1, 2],
+			[3, 4, 5],
+			[6, 7, 8],
+			[0, 3, 6],
+			[1, 4, 7],
+			[2, 5, 8],
+			[0, 4, 8],
+			[2, 4, 6]
+		];
+
+		for(let pattern of win_Patterns){
+			const [a, b, c] = pattern;
+			if(gameState[a] && gameState[a] == gameState[b] && gameState[a] == gameState[c]){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	
 
 };
